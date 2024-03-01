@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const app = express()
 const server_config = require("./configs/server.config")
 const db_config = require("./configs/db.config")
+const user_model = require("./models/user.model")
 
 /**
  * Create an admin user at the starting of the application
@@ -24,7 +25,25 @@ db.on("error", () =>{
 
 db.once("open", () =>{
      console.log("Connected to mongoDB")
+     init()
 })
+
+ async function init(){
+   let user = await user_model.findOne({userId : "admin"})
+
+     if(user){
+          console.log("Admin is already present")
+          return
+     }
+
+try {
+     user = await user_model.create({
+          
+     })
+} catch (err) {
+     console.log("Error while create admin", err)
+}
+}
 
 /**
  * start the server 
